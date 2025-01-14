@@ -4,4 +4,15 @@
 
 {% block content %}
     <h1>This is my homepage </h1>
+    {% if user.is_authenticated %}
+        <p>Olá {{ user.email }}!</p>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Terminar Sessão</button>
+        </form>
+    {% else %}
+        <p>Não estás logado!!</p>
+        <a href="{% url 'login' %}">Iniciar Sessão</a>
+        <a href="{% url 'signup' %}">Criar Conta</a>
+    {% endif %}
 {% endblock content %}
