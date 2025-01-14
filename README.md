@@ -1,7 +1,7 @@
 # Django Petiscos&Ariscos website with Docker
 
 This is an example project for building a website for my mother using **Django** and **Docker**. The aim of this project is to demonstrate the integration of Django with Docker to facilitate development and implementation.
-I had almost finished the backend and frontend, but as a Python developer, it's noticeable that in job vacancies, knowledge of Docker and databases is increasingly required, so I'm going to try to learn and make my mother's website in a professional way as if I were in a “Project” environment. 
+I had almost finished the backend and frontend, but as a Python developer, it's noticeable that in job positions, knowledge of Docker and databases is increasingly required, so I'm going to try to learn and make my mother's website in a professional way as if I were in a “Project” environment. 
 
 ## Technologies
 
