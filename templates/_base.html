@@ -26,19 +26,17 @@
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                                <a class="nav-link" href="{% url 'account_logout' %}" onclick="document.getElementById('logout-form').submit();">Log Out</a>
+                                <form id="logout-form" method="post" style="display: none;">
                                     {% csrf_token %}
-                                    <button type="submit" class="nav-link btn btn-link" style="display:inline; padding:0; border:none; background:none;">
-                                        Log Out
-                                    </button>
                                 </form>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                                <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
                             </li>
                         {% endif %}
                     </ul>
