@@ -9,7 +9,9 @@ services:
     depends_on:
       - db
     environment:
-      - DJANGO_SETTINGS_MODULE=django_website.settings  
+      - DJANGO_SETTINGS_MODULE=django_website.settings
+      - DJANGO_SECRET_KEY=.XleIuZjqrgmg[2LAsQTs)khErOm28)dw0[_CB.F
+      - "DJANGO_DEBUG=True"
   db:
     image: postgres:15
     volumes:
