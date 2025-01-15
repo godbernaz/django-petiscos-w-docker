@@ -1,4 +1,6 @@
+<!-- templates/signup.html -->
 {% extends '_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %} Criar conta {% endblock title %}
 
@@ -6,7 +8,8 @@
     <h2>Criar Conta</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Criar</button>
+        {{ form|crispy }}
+        <button class="btn btn-success" type="submit">Criar</button>
+        <a href="{% url 'home' %}">Voltar</a>
     </form>
 {% endblock content %}
