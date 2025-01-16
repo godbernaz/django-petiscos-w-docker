@@ -8,9 +8,10 @@ services:
       - 8000:8000
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
       - DJANGO_SETTINGS_MODULE=django_website.settings
-      - DJANGO_SECRET_KEY=p_Q+c39&#8'qRhqTN'QWJwwr'EM4[UR@,iQ9p^P9
       - "DJANGO_DEBUG=True"
   db:
     image: postgres:15
