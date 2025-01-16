@@ -23,7 +23,7 @@ I had almost finished the backend and frontend, but as a Python developer, it's 
 
 - **Docker** and **Docker Compose** installed on your computer.
 
-### Passos para rodar o projeto
+### Steps to run the project
 
 1. Clone the repository:
     ```bash

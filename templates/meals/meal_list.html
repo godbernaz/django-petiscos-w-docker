@@ -1,0 +1,12 @@
+<!-- templates/books/book_list.html -->
+{% extends "_base.html" %}
+
+{% block title %}Refeições{% endblock title %}
+
+{% block content %}
+    {% for meal in meal_list %}
+        <div>
+            <h2><a href="{{ meal.get_absolute_url }}">{{ meal.meal_name }}</a></h2>
+        </div>
+    {% endfor %}
+{% endblock content %}

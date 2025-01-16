@@ -1,0 +1,13 @@
+<!-- templates/books/book_detail.html -->
+{% extends "_base.html" %}
+
+{% block title %}{{ meal.meal_name }}{% endblock title %}
+
+{% block content %}
+    <div class="meal-detail">
+        <h2><a href="">{{ meal.meal_name }}</a></h2>
+        <p>Categoria: {{ meal.category }}</p>
+        <p>Preço: {{ meal.price }}</p>
+    </div>
+{% endblock content %}
+
