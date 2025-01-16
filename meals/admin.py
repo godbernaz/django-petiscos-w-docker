@@ -1,8 +1,16 @@
+# meals/admin.py
 from django.contrib import admin
-from .models import Meal, Category
+from .models import Meal, Category, Review
 
-# How Meals Interface will appear in /admin/
+# Reviews Inline
+class ReviewInline(admin.TabularInline):
+    model = Review
+
+# Meals Admin
 class MealAdmin(admin.ModelAdmin):
+    inlines = [
+        ReviewInline,
+    ]
     list_display = ('meal_name', 'category', 'price',)
 
 admin.site.register(Meal, MealAdmin)

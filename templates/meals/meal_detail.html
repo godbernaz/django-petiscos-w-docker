@@ -8,6 +8,14 @@
         <h2><a href="">{{ meal.meal_name }}</a></h2>
         <p>Categoria: {{ meal.category }}</p>
         <p>Preço: {{ meal.price }}</p>
+        <div>
+            <h3>Reviews</h3>
+            <ul>
+                {% for review in meal.reviews.all %}
+                    <li>{{ review.review }} {{ review.user_review}}
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock content %}
 
