@@ -25,6 +25,7 @@ class Meal(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     description = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='covers/', blank=True)
     
     def __str__(self):
         return self.meal_name

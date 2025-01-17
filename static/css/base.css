@@ -2,6 +2,11 @@ h1 {
     color: red;
 }
 
+img.mealimg {
+    height: 350px;
+    width: auto;
+}
+
 img.bookcover {
     height: 300px;
     width: auto;

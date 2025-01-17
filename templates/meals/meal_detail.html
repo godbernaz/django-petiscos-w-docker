@@ -5,6 +5,9 @@
 
 {% block content %}
     <div class="meal-detail">
+        {% if meal.image %}
+            <img class ="mealimg" src="{{ meal.image.url }}" alt="{{ meal.meal_name }}">
+        {% endif %}
         <h2><a href="">{{ meal.meal_name }}</a></h2>
         <p>Categoria: {{ meal.category }}</p>
         <p>Preço: {{ meal.price }}</p>
