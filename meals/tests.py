@@ -1,10 +1,10 @@
 # meals/tests.py
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
-
-from .models import Meal, Category,  Review
+from .models import Meal, Category, Review
 
 class MealTests(TestCase):
     
@@ -29,7 +29,7 @@ class MealTests(TestCase):
         
         cls.review = Review.objects.create(
             meal=cls.meal,
-            user_review = cls.user,
+            user_review=cls.user,
             review='Fantastico Lininha',
         )
         
@@ -45,11 +45,17 @@ class MealTests(TestCase):
         self.assertContains(response, 'Francesinha')
         self.assertTemplateUsed(response, 'meals/meal_list.html')
         
-    def test_meal_detail_view(self):
+    def test_meal_detail_view_for_logged_in_users_without_permission(self):
+        self.client.login(email='reviewuser@email.com', password='testpass123')
         response = self.client.get(self.meal.get_absolute_url())
-        no_response = self.client.get('/meals/12345')
+        self.assertEqual(response.status_code, 403)
+
+    def test_meal_detail_view_for_logged_in_users_with_permission(self):
+        self.client.login(email='reviewuser@email.com', password='testpass123')
+        special_permission = Permission.objects.get(codename='special_status')
+        self.user.user_permissions.add(special_permission)
+        response = self.client.get(self.meal.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(no_response.status_code, 404)
         self.assertContains(response, 'Francesinha')
         self.assertContains(response, 'Fantastico Lininha')
         self.assertTemplateUsed(response, 'meals/meal_detail.html')

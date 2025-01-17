@@ -27,6 +27,11 @@ class Meal(models.Model):
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='covers/', blank=True)
     
+    class Meta:
+        permissions = [
+            ('special_status', 'Can check the details of each meal')
+        ]
+    
     def __str__(self):
         return self.meal_name
     
