@@ -13,6 +13,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=django_website.settings
       - "DJANGO_DEBUG=True"
+      - "DJANGO_SECURE_SSL_REDIRECT=False" 
   db:
     image: postgres:15
     volumes:

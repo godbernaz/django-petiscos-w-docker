@@ -6,9 +6,6 @@ import socket
 env = Env()
 env.read_env()
 
-# Secret Key
-SECRET_KEY = env("DJANGO_SECRET_KEY")
-
 # Email
 DEFAULT_FROM_EMAIL = "admin@petiscoseariscos.pt" 
 
@@ -18,12 +15,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1%!k)o+xqh*nyhgmj8te0e5radw9gzbhqudfm+enb4^06x!y5-'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO_DEBUG")
+DEBUG = env.bool("DJANGO_DEBUG", default=True) 
 ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
+
+SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+
+#SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000) # 30 days
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+#SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
+#SESSION_COOKIE_SECURE = env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
+#CSRF_COOKIE_SECURE = env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
 
 # Application definition
 INSTALLED_APPS = [
@@ -65,10 +68,10 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False 
 
-ACCOUNT_USERNAME_REQUIRED = False # new
-ACCOUNT_AUTHENTICATION_METHOD = "email" # new
-ACCOUNT_EMAIL_REQUIRED = True # new
-ACCOUNT_UNIQUE_EMAIL = True # new
+ACCOUNT_USERNAME_REQUIRED = False 
+ACCOUNT_AUTHENTICATION_METHOD = "email" 
+ACCOUNT_EMAIL_REQUIRED = True 
+ACCOUNT_UNIQUE_EMAIL = True 
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
