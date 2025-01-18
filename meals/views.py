@@ -15,13 +15,12 @@ class MealListView(ListView):
     
 class MealDetailView(
         LoginRequiredMixin,
-        PermissionRequiredMixin,
         DetailView):
     model = Meal
     context_object_name = 'meal'
     template_name = 'meals/meal_detail.html'
     login_url = 'account_login'
-    permission_required = 'meals.special_status'
+    queryset = Meal.objects.all().prefetch_related('reviews__user_review',)
 
 class SearchResultsListView(ListView):
     model = Meal
