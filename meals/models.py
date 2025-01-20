@@ -38,6 +38,7 @@ class Meal(models.Model):
     def get_absolute_url(self):
         return reverse('meal_detail', args=[str(self.id)])
     
+# Reviews Model
 class Review(models.Model):
     meal = models.ForeignKey(
         Meal,
