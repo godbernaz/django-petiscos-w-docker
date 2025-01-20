@@ -2,14 +2,14 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
-from meals.models import Meal
-from .models import Cart, CartItem
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 
+from meals.models import Meal
+from .models import Cart, CartItem
+
 class CartDetailsView(TemplateView):
-    template_name = 'carts/cart_detail.html'  # Especifique o caminho do seu template
+    template_name = 'carts/cart_detail.html' 
 
 @method_decorator(login_required, name='dispatch')
 class CartAddView(View):
@@ -30,8 +30,36 @@ class CartAddView(View):
 
         return JsonResponse({'message': 'Refeição adicionada ao carrinho', 'cart_quantity': cart.items.count()})
 
-class cart_delete(TemplateView):
-    pass
+@method_decorator(login_required, name='dispatch')
+class CartDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        meal_id = self.request.POST.get('meal_id')
+        meal = get_object_or_404(Meal, id=meal_id)
+        cart = get_object_or_404(Cart, user=request.user)
 
-class cart_update(TemplateView):
-    pass
+        try:
+            cart_item = CartItem.objects.get(cart=cart, meal=meal)
+            cart_item.delete()
+            return JsonResponse({'message': 'Refeição removida do carrinho', 'cart_quantity': cart.items.count()})
+        except CartItem.DoesNotExist:
+            return JsonResponse({'message': 'Refeição não encontrada no carrinho'}, status=404)
+
+@method_decorator(login_required, name='dispatch')
+class CartUpdateView(View):
+    def post(self, request, *args, **kwargs):
+        meal_id = self.request.POST.get('meal_id')
+        action = self.request.POST.get('action')
+
+        cart = get_object_or_404(Cart, user=request.user)
+        cart_item = get_object_or_404(CartItem, cart=cart, meal_id=meal_id)
+
+        if action == 'increment':
+            cart_item.quantity += 1
+        elif action == 'decrement' and cart_item.quantity > 1:
+            cart_item.quantity -= 1
+        cart_item.save()
+
+        return JsonResponse({
+            'message': 'Quantidade atualizada com sucesso',
+            'cart_quantity': cart.items.count()
+        })

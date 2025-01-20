@@ -1,16 +1,39 @@
-<!-- templates/carts/cart_detail.html-->
+<!-- templates/carts/cart_detail.html -->
 {% extends "_base.html" %}
 
 {% block title %}Carrinho{% endblock title %}
 
 {% block content %}
 <h1>Detalhes do Carrinho</h1>
-<ul>
-    {% for item in request.user.cart.items.all %}
-        <li>{{ item.meal.meal_name }} - Quantidade: {{ item.quantity }} - Preço Total: {{ item.total_price }}</li>
-    {% empty %}
-        <li>Seu carrinho está vazio.</li>
-    {% endfor %}
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Refeição</th>
+            <th>Quantidade</th>
+            <th>Preço Total</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in request.user.cart.items.all %}
+            <tr>
+                <td>{{ item.meal.meal_name }}</td>
+                <td>
+                    <button class="btn btn-outline-secondary update-quantity-btn" data-meal-id="{{ item.meal.id }}" data-action="decrement">-</button>
+                    <span>{{ item.quantity }}</span>
+                    <button class="btn btn-outline-secondary update-quantity-btn" data-meal-id="{{ item.meal.id }}" data-action="increment">+</button>
+                </td>
+                <td>{{ item.total_price }}</td>
+                <td>
+                    <button class="remove-from-cart-btn btn btn-danger" data-meal-id="{{ item.meal.id }}">Remover</button>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">Seu carrinho está vazio.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <p>Preço Total: {{ request.user.cart.total_cart_price }}</p>
 {% endblock content %}
