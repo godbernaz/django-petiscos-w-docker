@@ -11,6 +11,7 @@ urlpatterns = [
     # Local Apps
     path('', include("pages.urls")),
     path('meals/', include("meals.urls")),
+    path('carts/', include("carts.urls")),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )

@@ -47,6 +47,15 @@
                         <input class="form-control me-2" type="search" name="q" placeholder="Procurar" aria-label="Procurar">
                         <button class="btn btn-outline-success" type="submit">Procurar</button>
                     </form>
+                    {% if user.is_authenticated %}
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart_detail' %}">
+                                <i class="bi bi-basket"></i> <span id="cart-badge">{{ user.cart.items.count }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </nav>

@@ -1,7 +1,7 @@
 # meals/views.py
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
-    PermissionRequiredMixin
+    #PermissionRequiredMixin
 )
 from django.db.models import Q
 from django.shortcuts import render

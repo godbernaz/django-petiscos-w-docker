@@ -1,0 +1,16 @@
+<!-- templates/carts/cart_detail.html-->
+{% extends "_base.html" %}
+
+{% block title %}Carrinho{% endblock title %}
+
+{% block content %}
+<h1>Detalhes do Carrinho</h1>
+<ul>
+    {% for item in request.user.cart.items.all %}
+        <li>{{ item.meal.meal_name }} - Quantidade: {{ item.quantity }} - Preço Total: {{ item.total_price }}</li>
+    {% empty %}
+        <li>Seu carrinho está vazio.</li>
+    {% endfor %}
+</ul>
+<p>Preço Total: {{ request.user.cart.total_cart_price }}</p>
+{% endblock content %}

@@ -1,4 +1,4 @@
-<!-- templates/books/book_detail.html -->
+<!-- templates/meals/meal_detail.html -->
 {% extends "_base.html" %}
 
 {% block title %}{{ meal.meal_name }}{% endblock title %}
@@ -11,6 +11,13 @@
         <h2><a href="">{{ meal.meal_name }}</a></h2>
         <p>Categoria: {{ meal.category }}</p>
         <p>Preço: {{ meal.price }}</p>
+        <form id="add-to-cart-form" method="post" action="{% url 'cart_add' %}">
+            {% csrf_token %}
+            <input type="hidden" name="meal_id" value="{{ meal.id }}">
+            <label for="quantity">Quantidade:</label>
+            <input type="number" name="quantity" id="quantity" value="1" min="1">
+            <button type="submit" class="btn btn-primary">Adicionar ao Carrinho</button>
+        </form>
         <div>
             <h3>Reviews</h3>
             <ul>
