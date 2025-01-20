@@ -12,6 +12,10 @@ class CartItemInline(admin.TabularInline):
 # Carrinho de Compras Admin
 class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]  # Exibe os itens do carrinho dentro do painel do carrinho
-    list_display = ('user', 'created_at')  # Exibe o utilizador e a data de criação do carrinho
+    list_display = ('user', 'created_at', 'total_cart_price')  # Exibe o utilizador, a data de criação do carrinho e o preço total do carrinho
+
+    def total_cart_price(self, obj):
+        return obj.total_cart_price  # Adiciona a propriedade total_cart_price ao admin
+    total_cart_price.short_description = 'Total Price'  # Altera a descrição do cabeçalho da coluna
 
 admin.site.register(Cart, CartAdmin)

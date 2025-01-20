@@ -4,11 +4,18 @@ from django.contrib.auth import get_user_model
 from meals.models import Meal  # Importa o modelo de refeição
 
 class Cart(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)  
+    user = models.OneToOneField(
+        get_user_model(), 
+        on_delete=models.CASCADE
+    )  
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Cart of {self.user.email}"
+    
+    @property
+    def total_cart_price(self):
+        return sum(item.total_price for item in self.items.all())  # Soma o preço total de todos os itens no carrinho
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)  
