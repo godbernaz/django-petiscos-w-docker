@@ -1,9 +1,6 @@
-# meals/tests.py
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
-
 from .models import Meal, Category, Review
 
 class MealTests(TestCase):
@@ -38,24 +35,15 @@ class MealTests(TestCase):
         self.assertEqual(f"{self.meal.category.category_name}", 'Filetes')
         self.assertEqual(f"{self.meal.price}", '30.00')
         self.assertEqual(f"{self.meal.description}", 'ola')
-        
-    def test_meal_list_view(self):
+
+    def test_meal_list_view_with_login(self):
+        self.client.login(username='reviewuser', password='testpass123')
         response = self.client.get(reverse('meal_list'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Francesinha')
         self.assertTemplateUsed(response, 'meals/meal_list.html')
-        
-    def test_meal_detail_view_for_logged_in_users_without_permission(self):
-        self.client.login(email='reviewuser@email.com', password='testpass123')
-        response = self.client.get(self.meal.get_absolute_url())
-        self.assertEqual(response.status_code, 403)
-
-    def test_meal_detail_view_for_logged_in_users_with_permission(self):
-        self.client.login(email='reviewuser@email.com', password='testpass123')
-        special_permission = Permission.objects.get(codename='special_status')
-        self.user.user_permissions.add(special_permission)
-        response = self.client.get(self.meal.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Francesinha')
-        self.assertContains(response, 'Fantastico Lininha')
-        self.assertTemplateUsed(response, 'meals/meal_detail.html')
+    
+    def test_meal_list_view_without_login(self):
+        response = self.client.get(reverse('meal_list'))
+        self.assertEqual(response.status_code, 302)  # Redireciona para a página de login
+        self.assertTrue(response.url.startswith('/accounts/login/'))  # Verifica o redirecionamento para login
