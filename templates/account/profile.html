@@ -11,10 +11,14 @@
         <button type="submit" name="save_profile" class="btn btn-primary">Alterar</button>
     </form>
 
-    <h2>Morada de envio e Faturação:</h2>
-    <form method="post">
+    <h2>
+        Morada de envio e Faturação:
+        <button type="button" class="btn btn-secondary" onclick="toggleAddressForm()">+</button>
+    </h2>
+    <form id="address-form" method="post" style="display: none;">
         {% csrf_token %}
         {{ address_form.as_p }}
         <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
     </form>
+
 {% endblock content %}

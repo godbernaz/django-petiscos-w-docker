@@ -2,9 +2,8 @@
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, View
+from django.views.generic import View
 from .forms import UserProfileForm, UserAddressForm
-from .models import CustomUser
 
 @method_decorator(login_required, name='dispatch')
 class UserProfileView(View):
