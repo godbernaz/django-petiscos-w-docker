@@ -3,8 +3,8 @@
 {% load i18n %}
 
 {% block content %}{% autoescape off %}{% user_display user as user_display %}{% blocktranslate with site_name=current_site.name site_domain=current_site.domain %}
-Está a receber este e-mail porque o utilizador {{ user_display }} forneceu o seu endereço de e-mail para registar uma conta no {{ site_domain }}.{% endblocktranslate %}
+Estás a receber este e-mail porque o utilizador {{ user_display }} forneceu o teu endereço de e-mail para registar uma conta no {{ site_domain }}.{% endblocktranslate %}
 
 {% if code %}{% blocktranslate %}O seu código de verificação de e-mail está listado abaixo. Por favor, introduza-o na janela aberta do seu browser.{% endblocktranslate %}
 
-{{ code }}{% else %}{% blocktranslate %}Para confirmar que este código está correto, clique no url: {{ activate_url }}{% endblocktranslate %}{% endif %}{% endautoescape %}{% endblock content %}
+{{ code }}{% else %}{% blocktranslate %}Para confirmar que este código está correto, clica no url: {{ activate_url }}{% endblocktranslate %}{% endif %}{% endautoescape %}{% endblock content %}

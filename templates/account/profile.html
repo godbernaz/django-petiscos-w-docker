@@ -1,0 +1,20 @@
+<!-- templates/account/customer/profile.html -->
+{% extends "_base.html" %}
+
+{% block title %}Perfil{% endblock title %}
+
+{% block content %}
+    <h2>Dados do Utilizador:</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        <button type="submit" name="save_profile" class="btn btn-primary">Alterar</button>
+    </form>
+
+    <h2>Morada de envio e Faturação:</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ address_form.as_p }}
+        <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
+    </form>
+{% endblock content %}

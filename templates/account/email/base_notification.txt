@@ -1,0 +1,14 @@
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}{% blocktrans %}Estás a receber este e-mail porque foi feita a seguinte alteração na sua conta:{% endblocktrans %}
+
+{% block notification_message %}
+{% endblock notification_message %}
+
+{% blocktrans %}Se não reconheces este pedido de alteração, toma imediatamente as devidas precauções de segurança. A alteração da tua conta teve origem em:
+
+- Endereço de IP: {{ip}}
+- Navegador: {{user_agent}}
+- Data: {{timestamp}}{% endblocktrans %}{% endautoescape %}{% endblock %}
