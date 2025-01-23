@@ -78,37 +78,35 @@ function toggleAddressForm() {
     }
 }
 
-// For the Zip Code field. Formatted for Portuguese ZipCode.
-document.addEventListener('DOMContentLoaded', function() {
-    var postalCodeInput = document.querySelector('#id_postal_code');
-
-    postalCodeInput.addEventListener('input', function(e) {
-        var value = postalCodeInput.value.replace(/\D/g, ''); // Remove non-numeric characters
-        if (value.length > 7) {
-            value = value.slice(0, 7);
-        }
-
-        if (value.length > 4) {
-            postalCodeInput.value = value.slice(0, 4) + '-' + value.slice(4);
-        } else {
-            postalCodeInput.value = value;
-        }
-    });
-});
-
-// For the NIF (Portuguese stuff)
 document.addEventListener('DOMContentLoaded', function () {
-    var nifInput = document.querySelector('#id_nif');
-    
-    nifInput.addEventListener('input', function (event) {
-        // Remove any non-digit characters
-        var value = event.target.value.replace(/\D/g, '');
+    function formatPostalCodeInput(input) {
+        input.addEventListener('input', function () {
+            let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+            if (value.length > 7) value = value.slice(0, 7);
 
-        // Limit to 9 digits
-        if (value.length > 9) {
-            value = value.slice(0, 9);
-        }
+            // Format as XXXX-XXX
+            input.value = value.length > 4 
+                ? value.slice(0, 4) + '-' + value.slice(4) 
+                : value;
+        });
+    }
 
-        event.target.value = value;
-    });
+    function limitToDigits(input, maxLength) {
+        input.addEventListener('input', function () {
+            let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+            input.value = value.slice(0, maxLength);    // Limit length
+        });
+    }
+
+    // Select and apply formatting to the Postcode field
+    const postalCodeInput = document.querySelector('#id_postal_code');
+    if (postalCodeInput) formatPostalCodeInput(postalCodeInput);
+
+    // Select and apply validation to the TaxNumber field
+    const nifInput = document.querySelector('#id_nif');
+    if (nifInput) limitToDigits(nifInput, 9);
+
+    // Selects and applies validation to the Phone Number field
+    const phoneInput = document.querySelector('#id_phone');
+    if (phoneInput) limitToDigits(phoneInput, 9);
 });
