@@ -68,16 +68,6 @@ $(document).on('click', '.update-quantity-btn', function(event) {
 });
 
 // templates/account/profile.html
-// Makes the form for Adress and Receipt only visible when toggled by the user. 
-function toggleAddressForm() {
-    var form = document.getElementById('address-form');
-    if (form.style.display === 'none') {
-        form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     function formatPostalCodeInput(input) {
         input.addEventListener('input', function () {
