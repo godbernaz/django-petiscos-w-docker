@@ -1,0 +1,49 @@
+<!-- templates/account/email.html -->
+{% extends "_base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}
+    {% trans "Email Addresses" %}
+{% endblock head_title %}
+
+{% block content %}
+    <h1>{% trans "Estado do email" %}</h1>
+    
+    {% if messages %}
+        <div>
+            {% for message in messages %}
+                <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% for emailaddress in emailaddresses %}
+        {% if emailaddress.verified %}
+            <p>{% trans 'O seguinte email está associado à sua conta e encontra-se confirmado:' %}</p>
+            <p>{{ emailaddress.email }}</p>
+        {% else %}
+            <p>{% trans 'O seguinte email está associado à sua conta mas não está confirmado:' %}</p>
+            <form method="post" action="{% url 'account_email' %}">
+                {% csrf_token %}
+                <div>
+                    <input type="radio" name="email" value="{{ emailaddress.email }}" id="email_{{ forloop.counter }}" {% if forloop.first %}checked{% endif %}>
+                    <label for="email_{{ forloop.counter }}">
+                        {{ emailaddress.email }}
+                        <span class="badge badge-warning">{% trans "Unverified" %}</span>
+                    </label>
+                </div>
+                <button type="submit" name="action_send" class="btn btn-secondary">{% trans 'Verificar Email' %}</button>
+            </form>
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
+
+{% block extra_body %}
+    {% if not user.is_authenticated %}
+        <script>
+            alert("{% trans 'Tens de iniciar sessão para aceder a esta página.' %}");
+            window.location.href = "{% url 'account_login' %}";
+        </script>
+    {% endif %}
+{% endblock extra_body %}

@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.urls import reverse, resolve
-
+from django.urls import reverse
 
 # Create your tests here.
 class CustomUserTests(TestCase):
@@ -53,6 +52,3 @@ class SignUpPageTests(TestCase):
         self.assertEqual(get_user_model().objects.all().count(), 1)
         self.assertEqual(get_user_model().objects.all()[0].username, self.username)
         self.assertEqual(get_user_model().objects.all()[0].email, self.email)
-        
-    
-    

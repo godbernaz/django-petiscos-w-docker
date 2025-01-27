@@ -10,6 +10,14 @@
         {{ profile_form.as_p }}
         <button type="submit" name="save_profile" class="btn btn-primary">Alterar</button>
     </form>
+    <p>
+        {% if email_verified %}
+            ✅ O teu email está verificado.
+        {% else %}
+            ⚠️ O teu email ainda não está verificado.
+            <a href="{% url 'account_email' %}" class="btn btn-link">Clique aqui para enviar novamente o pedido de confirmação.</a>.
+        {% endif %}
+    </p>
     <h2>Alterar Password:</h2>
     <form method="post">
         {% csrf_token %}
@@ -22,5 +30,4 @@
         {{ address_form.as_p }}
         <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
     </form>
-
 {% endblock content %}

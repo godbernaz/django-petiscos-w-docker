@@ -25,9 +25,12 @@ class CustomUserChangeForm(UserChangeForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = [
-            'first_name', 'last_name', 'email',
-        ]
+        fields = ['first_name', 'last_name', 'email']
+        labels = {
+            'first_name': 'Nome',
+            'last_name': 'Apelido',
+            'email': 'Email',
+        }
 
 class ChangePasswordForm(SetPasswordForm):
     old_password = forms.CharField(
@@ -90,9 +93,14 @@ class ChangePasswordForm(SetPasswordForm):
 class UserAddressForm(forms.ModelForm):
     class Meta:
         model = UserBilling
-        fields = [
-            'address', 'postal_code', 'city', 'phone', 'nif'
-        ]
+        fields = ['address', 'postal_code', 'city', 'phone', 'nif']
+        labels = {
+            'address': 'Morada',
+            'city': 'Cidade',
+            'postal_code': 'Código Postal',
+            'phone': 'Telemóvel',
+            'nif': 'NIF',
+        }
         
     # Check that the postal code is in the correct format (XXXX-XXX)
     def validate_postal_code_format(self):

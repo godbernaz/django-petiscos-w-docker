@@ -2,6 +2,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import RegexValidator
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from allauth.account.models import EmailAddress
 
 def validate_postal_code():
     return RegexValidator(
@@ -46,3 +49,11 @@ class UserBilling(models.Model):
         null=True,
         validators=[validate_nif()]
     )
+    
+@receiver(pre_save, sender=CustomUser)
+def ensure_single_email(sender, instance, **kwargs):
+    if instance.pk:  
+        old_email = CustomUser.objects.filter(pk=instance.pk).values_list('email', flat=True).first()
+        if old_email and old_email != instance.email:
+            # Remove old emails associated with the user
+            EmailAddress.objects.filter(user=instance).delete()

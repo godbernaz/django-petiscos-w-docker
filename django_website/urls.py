@@ -8,8 +8,8 @@ urlpatterns = [
     # Django Admin
     path('admin/', admin.site.urls),
     # User Management
-    path('accounts/', include("allauth.urls")),
     path('accounts/', include('accounts.urls')), 
+    path('accounts/', include("allauth.urls")),
     # Local Apps
     path('', include("pages.urls")),
     path('meals/', include("meals.urls")),
