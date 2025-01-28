@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'meals.apps.MealsConfig',
     'carts.apps.CartsConfig',
+    'core.apps.CoreConfig',
 ]
 
 # django-allauth config
@@ -120,31 +121,43 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
+# settings.py
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,  
+        },
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'core.validators.CustomPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'core.validators.PasswordNotSimilarToUserValidator',
+    },
+    {
+        'NAME': 'core.validators.PasswordNotCommonValidator',
+    },
+    {
+        'NAME': 'core.validators.ComplexPasswordValidator',
+    },
+    {
+        'NAME': 'core.validators.PasswordNoCommonWordsValidator',
+    },
+    {
+        'NAME': 'core.validators.PasswordNoSpecialCharactersValidator', 
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Lisbon'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 

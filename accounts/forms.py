@@ -6,6 +6,8 @@ from .models import CustomUser, UserBilling
 from django import forms
 import re
 
+from core.validators import PasswordNoSpecialCharactersValidator, PasswordNotCommonValidator, CustomPasswordValidator, PasswordNoCommonWordsValidator
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
@@ -37,13 +39,30 @@ class ChangePasswordForm(SetPasswordForm):
         label='',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Password Antiga',
+            'placeholder': 'Palavra-passe antiga',
         }),
-        help_text=(
-            '<span class="form-text text-muted">'
-            '<small>Introduza a sua palavra-chave atual.</small>'
-            '</span>'
-        ),
+    )
+
+    new_password1 = forms.CharField(
+        label='Nova palavra-passe',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Palavra-passe nova',
+        }),
+        validators=[
+            PasswordNoSpecialCharactersValidator().validate,
+            PasswordNotCommonValidator().validate,
+            CustomPasswordValidator().validate,
+            PasswordNoCommonWordsValidator().validate,
+        ]
+    )
+
+    new_password2 = forms.CharField(
+        label='Confirmar palavra-passe',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirmar palavra-passe nova',
+        }),
     )
 
     class Meta:
@@ -52,26 +71,13 @@ class ChangePasswordForm(SetPasswordForm):
 
     def __init__(self, *args, **kwargs):
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
-        
+
         field_attrs = {
             'new_password1': {
-                'placeholder': 'Palavra-chave nova',
-                'help_text': (
-                    '<ul class="form-text text-muted small">'
-                    '<li>A sua palavra-chave não pode ser demasiado semelhante às suas outras informações pessoais.</li>'
-                    '<li>A sua palavra-chave deve conter pelo menos 8 caracteres.</li>'
-                    '<li>A sua palavra-chave não pode ser uma palavra-chave comummente utilizada.</li>'
-                    '<li>A sua palavra-chave não pode ser totalmente numérica.</li>'
-                    '</ul>'
-                ),
+                'placeholder': 'Palavra-passe nova',
             },
             'new_password2': {
-                'placeholder': 'Confirmar palavra-chave nova',
-                'help_text': (
-                    '<span class="form-text text-muted">'
-                    '<small>Introduza a mesma palavra-chave que anteriormente, para verificação.</small>'
-                    '</span>'
-                ),
+                'placeholder': 'Confirmar palavra-passe nova',
             },
         }
 
@@ -79,14 +85,13 @@ class ChangePasswordForm(SetPasswordForm):
             field = self.fields[field_name]
             field.widget.attrs.update({'class': 'form-control', 'placeholder': attrs['placeholder']})
             field.label = ''
-            field.help_text = attrs['help_text']
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get('old_password')
         user = self.user  
 
         if not check_password(old_password, user.password):
-            raise forms.ValidationError('A palavra-chave antiga não está correta. Por favor, tente novamente.')
+            raise forms.ValidationError('A palavra-passe antiga não está correta. Por favor, tenta novamente.')
         
         return old_password
         

@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from allauth.account.models import EmailAddress
+from django.shortcuts import redirect
 
 from .forms import UserProfileForm, UserAddressForm, ChangePasswordForm
 from .models import UserBilling
@@ -83,3 +84,4 @@ class UserProfileView(View):
             'password_form': password_form,
             'email_verified': email_verified, 
         })
+        
