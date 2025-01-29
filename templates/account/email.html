@@ -38,12 +38,3 @@
         {% endif %}
     {% endfor %}
 {% endblock content %}
-
-{% block extra_body %}
-    {% if not user.is_authenticated %}
-        <script>
-            alert("{% trans 'Tens de iniciar sessão para aceder a esta página.' %}");
-            window.location.href = "{% url 'account_login' %}";
-        </script>
-    {% endif %}
-{% endblock extra_body %}
