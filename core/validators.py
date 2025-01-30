@@ -55,10 +55,11 @@ class CustomPasswordValidator:
 
 # Validator to ensure that the password is not similar to the username
 class PasswordNotSimilarToUserValidator:
-    def validate(self, password, user):
-        username = user.username  # Get username
-        if username.lower() in password.lower():  # Check if the username is in the password
-            raise ValidationError("A palavra-passe não pode ser semelhante ao nome de utilizador ou email.")
+    def validate(self, password, user=None):
+        if user and hasattr(user, "username") and user.username: 
+            username = user.username
+            if username.lower() in password.lower():
+                raise ValidationError("A palavra-passe não pode ser semelhante ao nome de utilizador ou email.")
     
     def get_help_text(self):
         return "A palavra-passe não pode ser semelhante ao nome de utilizador ou email."

@@ -1,33 +1,55 @@
-<!-- templates/account/customer/profile.html -->
 {% extends "_base.html" %}
 
 {% block title %}Perfil{% endblock title %}
 
 {% block content %}
-    <h2>Dados do Utilizador:</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ profile_form.as_p }}
-        <button type="submit" name="save_profile" class="btn btn-primary">Alterar</button>
-    </form>
-    <p>
-        {% if email_verified %}
-            ✅ O teu email está verificado.
-        {% else %}
-            ⚠️ O teu email ainda não está verificado.
-            <a href="{% url 'account_email' %}" class="btn btn-link">Clique aqui para enviar novamente o pedido de confirmação.</a>.
-        {% endif %}
-    </p>
-    <h2>Alterar a Palavra-passe:</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ password_form.as_p }}
-        <button type="submit" name="change_password" class="btn btn-danger">Alterar</button>
-    </form>
-    <h2>Morada de envio e Faturação:</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ address_form.as_p }}
-        <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
-    </form>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">Dados do Utilizador</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ profile_form.as_p }}
+                        <button type="submit" name="save_profile" class="btn btn-primary">Alterar</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="mt-3">
+                <div class="alert {% if email_verified %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+                    {% if email_verified %}
+                        ✅ O teu email está verificado.
+                    {% else %}
+                        ⚠️ O teu email ainda não está verificado.
+                        <a href="{% url 'account_email' %}" class="btn btn-link">Clique aqui para enviar novamente o pedido de confirmação.</a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header bg-danger text-white">Alterar a Palavra-passe</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ password_form.as_p }}
+                        <button type="submit" name="change_password" class="btn btn-danger">Alterar</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-header bg-secondary text-white">Morada de Envio e Faturação</div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ address_form.as_p }}
+                        <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

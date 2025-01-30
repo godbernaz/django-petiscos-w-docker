@@ -15,7 +15,7 @@ class Cart(models.Model):
     
     @property
     def total_cart_price(self):
-        return sum(item.total_price for item in self.items.all())  # Soma o preço total de todos os itens no carrinho
+        return sum(item.total_price for item in self.items.all())  
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)  
