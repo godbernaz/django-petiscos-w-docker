@@ -16,9 +16,9 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="mt-3">
-                <div class="alert {% if email_verified %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+                <div class="alert {% if email_verified %}alert-success{% else %}alert-warning{% endif %}">
                     {% if email_verified %}
                         ✅ O teu email está verificado.
                     {% else %}
@@ -27,7 +27,7 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             <div class="card mt-3">
                 <div class="card-header bg-danger text-white">Alterar a Palavra-passe</div>
                 <div class="card-body">
@@ -38,15 +38,76 @@
                     </form>
                 </div>
             </div>
-            
+
             <div class="card mt-3">
-                <div class="card-header bg-secondary text-white">Morada de Envio e Faturação</div>
+                <div class="card-header bg-secondary text-white">Faturação e Envio</div>
                 <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ address_form.as_p }}
-                        <button type="submit" name="save_address" class="btn btn-primary">Alterar</button>
-                    </form>
+                    {% if not billing_profiles %}
+                        <p>Sem perfis de faturação.</p>
+                    {% endif %}
+
+                    <div class="row">
+                        {% for billing in billing_profiles %}
+                        <div class="col-md-12 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ billing.name }}</h5>
+                                    <p class="card-text">
+                                        <strong>Morada:</strong> {{ billing.address }}<br>
+                                        <strong>Código Postal:</strong> {{ billing.postal_code }}<br>
+                                        <strong>Cidade:</strong> {{ billing.city }}<br>
+                                        <strong>Telefone:</strong> {{ billing.phone }}<br>
+                                        <strong>NIF:</strong> {{ billing.nif }}
+                                    </p>
+
+                                    <!-- Botão de Editar -->
+                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editBillingModal{{ billing.id }}">
+                                        Editar
+                                    </button>
+
+                                    <!-- Form para Remover -->
+                                    <form method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="billing_id" value="{{ billing.id }}">
+                                        <button type="submit" name="delete_billing" class="btn btn-danger btn-sm">Remover</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal de Edição -->
+                        <div class="modal fade" id="editBillingModal{{ billing.id }}" tabindex="-1" aria-labelledby="editBillingModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Editar Perfil de Faturação</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="billing_id" value="{{ billing.id }}">
+                                            {{ new_billing_form.as_p }}
+                                            <button type="submit" name="edit_billing" class="btn btn-primary">Guardar Alterações</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <button class="btn btn-success mt-3" data-bs-toggle="collapse" data-bs-target="#addBillingForm">
+                        + Adicionar Novo Perfil
+                    </button>
+
+                    <div id="addBillingForm" class="collapse mt-3">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ new_billing_form.as_p }}
+                            <button type="submit" name="add_billing" class="btn btn-primary">Guardar</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

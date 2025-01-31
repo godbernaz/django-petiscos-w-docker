@@ -28,27 +28,22 @@ class CustomUser(AbstractUser):
     pass
     
 class UserBilling(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='billing_info')
-    address = models.CharField(max_length=40, blank=True, null=True)
-    city = models.CharField(max_length=30, blank=True, null=True)
-    postal_code = models.CharField(
-        max_length=8,
-        blank=True,
-        null=True,
-        validators=[validate_postal_code()]
-    )
-    phone = models.CharField(
-        max_length=9,  
-        blank=True,
-        null=True,
-        validators=[validate_phone()]
-    )
-    nif = models.CharField(
-        max_length=9,
-        blank=True,
-        null=True,
-        validators=[validate_nif()]
-    )
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='billing_profiles')
+    name = models.CharField(max_length=50, help_text="Nome do perfil de faturação", null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
+    postal_code = models.CharField(max_length=8, blank=True, null=True, validators=[validate_postal_code()])
+    phone = models.CharField(max_length=9, blank=True, null=True, validators=[validate_phone()])
+    nif = models.CharField(max_length=9, blank=True, null=True, validators=[validate_nif()])
+    is_default = models.BooleanField(default=False, help_text="Definir como perfil de faturação padrão")
+    
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            UserBilling.objects.filter(user=self.user, is_default=True).update(is_default=False)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} - {self.nif}"
     
 @receiver(pre_save, sender=CustomUser)
 def ensure_single_email(sender, instance, **kwargs):

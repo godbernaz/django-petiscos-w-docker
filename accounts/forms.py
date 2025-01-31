@@ -95,39 +95,34 @@ class ChangePasswordForm(SetPasswordForm):
         
         return old_password
         
-class UserAddressForm(forms.ModelForm):
+class UserBillingForm(forms.ModelForm):
     class Meta:
         model = UserBilling
-        fields = ['address', 'postal_code', 'city', 'phone', 'nif']
+        fields = ['name', 'address', 'postal_code', 'city', 'phone', 'nif', 'is_default']
         labels = {
+            'name': 'Nome do Perfil',
             'address': 'Morada',
             'city': 'Cidade',
             'postal_code': 'Código Postal',
             'phone': 'Telemóvel',
             'nif': 'NIF',
+            'is_default': 'Definir como padrão',
         }
-        
-    # Check that the postal code is in the correct format (XXXX-XXX)
-    def validate_postal_code_format(self):
-        postal_code = self.cleaned_data['postal_code']
-        if not postal_code or not re.match(r'^\d{4}-\d{3}$', postal_code):
+
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data.get('postal_code')
+        if postal_code and not re.match(r'^\d{4}-\d{3}$', postal_code):
             raise forms.ValidationError("O código postal deve estar no formato XXXX-XXX.")
         return postal_code
-    
-     # Validate cell phone number (only numbers and exactly 9 digits)
-    def validate_phone_format(self):
+
+    def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        if phone and not phone.isdigit():
-            raise forms.ValidationError('O número de telemóvel deve conter apenas números.')
-        if len(phone) != 9:
-            raise forms.ValidationError('O número de telemóvel deve conter exatamente 9 dígitos.')
+        if phone and (not phone.isdigit() or len(phone) != 9):
+            raise forms.ValidationError("O número de telemóvel deve conter exatamente 9 dígitos e apenas números.")
         return phone
 
-    # Validate the NIF(Tax Number) (only numbers and 9 digits)
-    def validate_nif_format(self):
+    def clean_nif(self):
         nif = self.cleaned_data.get('nif')
-        if nif and not nif.isdigit():
-            raise forms.ValidationError('O NIF deve conter apenas números.')
-        if len(nif) != 9:
-            raise forms.ValidationError('O NIF deve conter exatamente 9 dígitos.')
+        if nif and (not nif.isdigit() or len(nif) != 9):
+            raise forms.ValidationError("O NIF deve conter exatamente 9 dígitos e apenas números.")
         return nif
