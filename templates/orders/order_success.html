@@ -1,0 +1,11 @@
+<!-- templates/orders/order_success.html -->
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Pedido Realizado com Sucesso!</h2>
+    <p>O seu pedido <strong>#{{ order.id }}</strong> foi confirmado.</p>
+    <p>O total foi de <strong>€{{ order.total_price }}</strong>.</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Voltar à Página Inicial</a>
+</div>
+{% endblock %}

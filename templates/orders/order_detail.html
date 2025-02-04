@@ -27,12 +27,12 @@
 
     <!-- Perfis de Faturação -->
     <h3 class="mt-4">Escolha o Perfil de Faturação:</h3>
-    <form method="POST" class="mb-3">
+    <form method="POST" action="{% url 'confirm_order' %}" class="mb-3">
         {% csrf_token %}
         <div class="form-check">
             {% for profile in billing_profiles %}
                 <label class="form-check-label d-block">
-                    <input class="form-check-input" type="radio" name="billing_profile" value="{{ profile.id }}">
+                    <input class="form-check-input" type="radio" name="billing_profile" value="{{ profile.id }}" required>
                     <strong>{{ profile.name }}</strong> - {{ profile.address }}, {{ profile.city }} 
                     <br> <small>Telemóvel: {{ profile.phone }} | NIF: {{ profile.nif }}</small>
                 </label>
