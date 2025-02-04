@@ -6,9 +6,10 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View
+from django.views.generic import View, ListView
 from allauth.account.models import EmailAddress
 from django.shortcuts import redirect
+from orders.models import Order
 
 from .forms import UserProfileForm, UserBillingForm, ChangePasswordForm
 from .models import UserBilling
@@ -113,3 +114,13 @@ class UserProfileView(View):
             'billing_profiles': billing_profiles,
             'new_billing_form': new_billing_form,
         })
+    
+@method_decorator(login_required, name='dispatch')
+class OrderListView(ListView):
+    model = Order
+    template_name = 'account/order_list.html'
+    context_object_name = 'orders'
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)

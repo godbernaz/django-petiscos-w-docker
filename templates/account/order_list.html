@@ -1,0 +1,36 @@
+<!-- templates/account/order_list.html -->
+{% extends '_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Meus Pedidos</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>ID do Pedido</th>
+                <th>Data</th>
+                <th>Preço Total</th>
+                <th>Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                <td>{{ order.total_price }}€</td>
+                <td>
+                    <a href="{% url 'order_detail' order_id=order.id %}" class="btn btn-primary btn-sm">
+                        Ver Detalhes
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Ainda não fizeste nenhum pedido.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

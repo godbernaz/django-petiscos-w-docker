@@ -13,11 +13,13 @@ class OrderDetailsView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         cart = get_object_or_404(Cart, user=self.request.user)
         billing_profiles = UserBilling.objects.filter(user=self.request.user)
+        order = get_object_or_404(Order, id=self.kwargs['order_id'], user=self.request.user)
         form = UserBillingForm()
         
         context['cart'] = cart
         context['billing_profiles'] = billing_profiles
         context['billing_form'] = form
+        context['order'] = order
         return context
 
     def post(self, request, *args, **kwargs):
