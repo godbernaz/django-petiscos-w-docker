@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'meals.apps.MealsConfig',
     'carts.apps.CartsConfig',
     'core.apps.CoreConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 # django-allauth config

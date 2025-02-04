@@ -30,4 +30,4 @@ class CartItem(models.Model):
 
     @property
     def total_price(self):
-        return self.meal.price * self.quantity  # Calcula o preço total baseado na quantidade e no preço da refeição
+        return self.meal.price * self.quantity  

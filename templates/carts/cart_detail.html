@@ -36,5 +36,5 @@
     </tbody>
 </table>
 <p>Preço Total: {{ request.user.cart.total_cart_price }}</p>
-<a href="#" class="btn btn-success">Finalizar Compra</a>
+<a href="{% url 'order_detail' %}" class="btn btn-success">Finalizar Compra</a>
 {% endblock content %}

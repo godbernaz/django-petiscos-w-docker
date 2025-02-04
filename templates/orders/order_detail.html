@@ -1,0 +1,30 @@
+<!-- templates/orders/order_detail.html -->
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Detalhes do Pedido</h2>
+
+    <!-- Itens do Carrinho -->
+    <h3>Seus Itens:</h3>
+    <ul>
+        {% for item in cart.items.all %}
+            <li>{{ item.quantity }} x {{ item.meal.meal_name }} - €{{ item.total_price }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Total: €{{ cart.total_cart_price }}</strong></p>
+
+    <!-- Perfis de Faturação -->
+    <h3>Escolha o Perfil de Faturação:</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {% for profile in billing_profiles %}
+            <label>
+                <input type="radio" name="billing_profile" value="{{ profile.id }}">
+                {{ profile.name }} - {{ profile.address }}, {{ profile.city }} (NIF: {{ profile.nif }})
+            </label><br>
+        {% endfor %}
+        <button type="submit">Confirmar Pedido</button>
+    </form>
+</div>
+{% endblock %}

@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 
-# Meals Categories
 class Category(models.Model):
     category_name = models.CharField(max_length=200)
     
@@ -14,7 +13,6 @@ class Category(models.Model):
     class Meta:
 	    verbose_name_plural = 'Categories'
 
-# Meals Model
 class Meal(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -38,7 +36,6 @@ class Meal(models.Model):
     def get_absolute_url(self):
         return reverse('meal_detail', args=[str(self.id)])
     
-# Reviews Model
 class Review(models.Model):
     meal = models.ForeignKey(
         Meal,
