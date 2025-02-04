@@ -2,29 +2,68 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<div class="container">
-    <h2>Detalhes do Pedido</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Pedido</h2>
+
+    <!-- Nome do Usuário -->
+    <p><strong>Utilizador:</strong> 
+        {% if user.first_name and user.last_name %}
+            {{ user.first_name }} {{ user.last_name }}
+        {% else %}
+            {{ user.email }}
+        {% endif %}
+    </p>
 
     <!-- Itens do Carrinho -->
-    <h3>Seus Itens:</h3>
-    <ul>
+    <h3 class="mt-4">Seus Itens:</h3>
+    <ul class="list-group mb-3">
         {% for item in cart.items.all %}
-            <li>{{ item.quantity }} x {{ item.meal.meal_name }} - €{{ item.total_price }}</li>
+            <li class="list-group-item">
+                {{ item.quantity }} x {{ item.meal.meal_name }} - <strong>€{{ item.total_price }}</strong>
+            </li>
         {% endfor %}
     </ul>
-    <p><strong>Total: €{{ cart.total_cart_price }}</strong></p>
+    <p class="fw-bold">Total: €{{ cart.total_cart_price }}</p>
 
     <!-- Perfis de Faturação -->
-    <h3>Escolha o Perfil de Faturação:</h3>
-    <form method="POST">
+    <h3 class="mt-4">Escolha o Perfil de Faturação:</h3>
+    <form method="POST" class="mb-3">
         {% csrf_token %}
-        {% for profile in billing_profiles %}
-            <label>
-                <input type="radio" name="billing_profile" value="{{ profile.id }}">
-                {{ profile.name }} - {{ profile.address }}, {{ profile.city }} (NIF: {{ profile.nif }})
-            </label><br>
-        {% endfor %}
-        <button type="submit">Confirmar Pedido</button>
+        <div class="form-check">
+            {% for profile in billing_profiles %}
+                <label class="form-check-label d-block">
+                    <input class="form-check-input" type="radio" name="billing_profile" value="{{ profile.id }}">
+                    <strong>{{ profile.name }}</strong> - {{ profile.address }}, {{ profile.city }} 
+                    <br> <small>Telemóvel: {{ profile.phone }} | NIF: {{ profile.nif }}</small>
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Confirmar Pedido</button>
     </form>
+
+    <!-- Botão para Mostrar Formulário -->
+    <button class="btn btn-link text-primary" id="showFormBtn">+ Adicionar um Novo Perfil</button>
+
+    <!-- Formulário para Criar Novo Perfil (Escondido Inicialmente) -->
+    <div id="billingFormContainer" class="mt-3" style="display: none;">
+        <h3>Crie um novo perfil de faturação:</h3>
+        <form method="POST" class="border p-3 rounded">
+            {% csrf_token %}
+            {{ billing_form.as_p }}
+            <button type="submit" class="btn btn-success">Criar Perfil</button>
+        </form>
+    </div>
 </div>
+
+<!-- Script para Mostrar/Ocultar Formulário -->
+<script>
+    document.getElementById('showFormBtn').addEventListener('click', function() {
+        let formContainer = document.getElementById('billingFormContainer');
+        if (formContainer.style.display === 'none') {
+            formContainer.style.display = 'block';
+        } else {
+            formContainer.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}
