@@ -6,20 +6,19 @@ from accounts.models import UserBilling
 from accounts.forms import UserBillingForm
 from orders.models import Order, OrderItem
 
-class OrderDetailsView(LoginRequiredMixin, TemplateView):
-    template_name = 'orders/order_detail.html'
+class CheckoutDetailsView(LoginRequiredMixin, TemplateView):
+    template_name = 'orders/checkout.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_object_or_404(Cart, user=self.request.user)
         billing_profiles = UserBilling.objects.filter(user=self.request.user)
-        order = get_object_or_404(Order, id=self.kwargs['order_id'], user=self.request.user)
         form = UserBillingForm()
         
         context['cart'] = cart
         context['billing_profiles'] = billing_profiles
         context['billing_form'] = form
-        context['order'] = order
+        # Removemos a busca pelo objeto Order, pois ele ainda não foi criado
         return context
 
     def post(self, request, *args, **kwargs):
@@ -33,7 +32,8 @@ class OrderDetailsView(LoginRequiredMixin, TemplateView):
             billing_profile = form.save(commit=False)
             billing_profile.user = request.user
             billing_profile.save()
-            return redirect('order_detail')
+            # Se necessário, redirecione para a mesma página ou para a confirmação de pedido
+            return redirect('checkout')
         
         context = self.get_context_data()
         context['billing_form'] = form
@@ -67,6 +67,22 @@ class ConfirmOrderView(LoginRequiredMixin, View):
 
 class OrderSuccessView(LoginRequiredMixin, TemplateView):
     template_name = 'orders/order_success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order'] = get_object_or_404(Order, id=self.kwargs['order_id'], user=self.request.user)
+        return context
+
+class OrderListView(LoginRequiredMixin, TemplateView):
+    template_name = 'orders/orders_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['orders'] = Order.objects.filter(user=self.request.user)
+        return context
+
+class OrderDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'orders/order_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
