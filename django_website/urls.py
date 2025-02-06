@@ -7,14 +7,15 @@ from django.urls import path, include
 urlpatterns = [
     # Django Admin
     path('admin/', admin.site.urls),
+    path('moderator/', include('moderator.urls')),
     # User Management
     path('accounts/', include('accounts.urls')), 
     path('accounts/', include("allauth.urls")),
     # Local Apps
     path('', include("pages.urls")),
-    path('meals/', include("meals.urls")),
-    path('carts/', include("carts.urls")),
-    path('orders/', include("orders.urls")),
+    path('meals/', include('meals.urls')),
+    path('carts/', include('carts.urls')),
+    path('orders/', include('orders.urls')),
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
