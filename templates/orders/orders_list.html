@@ -1,4 +1,4 @@
-<!-- templates/account/orders_list.html -->
+<!-- templates/orders/orders_list.html -->
 {% extends '_base.html' %}
 
 {% block content %}
@@ -10,6 +10,7 @@
                 <th>ID do Pedido</th>
                 <th>Data</th>
                 <th>Preço Total</th>
+                <th>Estado</th>
                 <th>Detalhes</th>
             </tr>
         </thead>
@@ -20,6 +21,16 @@
                 <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
                 <td>{{ order.total_price }}€</td>
                 <td>
+                    <span class="badge {% if order.status == 'Open' %}bg-primary
+                        {% elif order.status == 'Ready' %}bg-warning
+                        {% elif order.status == 'Delivered' %}bg-success
+                        {% elif order.status == 'Closed' %}bg-secondary
+                        {% elif order.status == 'Canceled' %}bg-danger
+                        {% endif %}">
+                        {{ order.status }}
+                    </span>
+                </td>
+                <td>
                     <a href="{% url 'order_detail' order_id=order.id %}" class="btn btn-primary btn-sm">
                         Ver Detalhes
                     </a>
@@ -27,7 +38,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4" class="text-center">Ainda não fizeste nenhum pedido.</td>
+                <td colspan="5" class="text-center">Ainda não fizeste nenhum pedido.</td>
             </tr>
             {% endfor %}
         </tbody>

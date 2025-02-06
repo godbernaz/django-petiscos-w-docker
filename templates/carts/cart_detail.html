@@ -36,5 +36,39 @@
     </tbody>
 </table>
 <p>Preço Total: {{ request.user.cart.total_cart_price }}</p>
-<a href="{% url 'checkout' %}" class="btn btn-success">Pagamento</a>
+
+{% if cart_item_count > 0 %}
+    <a href="{% url 'checkout' %}" class="btn btn-success">Pagamento</a>
+{% else %}
+    <div class="alert alert-warning" role="alert">
+        Seu carrinho está vazio. Adicione refeições ao carrinho para prosseguir com o pagamento.
+    </div>
+{% endif %}
 {% endblock content %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const paymentButton = document.querySelector('.btn-success');
+        const cartItemCount = { cart_item_count };
+
+        // Disable the payment button if the cart is empty
+        if (cartItemCount === 0) {
+            paymentButton.disabled = true;
+            paymentButton.classList.add('disabled');
+        }
+
+        // Listen for cart updates (e.g., when items are removed)
+        document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const cartItemCountElement = document.querySelector('.cart-item-count');
+                if (cartItemCountElement) {
+                    const newCount = parseInt(cartItemCountElement.textContent) - 1;
+                    if (newCount === 0) {
+                        paymentButton.disabled = true;
+                        paymentButton.classList.add('disabled');
+                    }
+                }
+            });
+        });
+    });
+</script>

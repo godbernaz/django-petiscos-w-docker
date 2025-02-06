@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from carts.models import Cart
@@ -9,6 +10,13 @@ from orders.models import Order, OrderItem
 class CheckoutDetailsView(LoginRequiredMixin, TemplateView):
     template_name = 'orders/checkout.html'
 
+    def get(self, request, *args, **kwargs):
+        cart = get_object_or_404(Cart, user=request.user)
+        if not cart.items.exists():
+            messages.error(request, "Seu carrinho está vazio. Adicione itens ao carrinho para prosseguir com o pagamento.")
+            return redirect('cart_detail')  # Redirect to the cart detail page
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = get_object_or_404(Cart, user=self.request.user)
@@ -18,7 +26,6 @@ class CheckoutDetailsView(LoginRequiredMixin, TemplateView):
         context['cart'] = cart
         context['billing_profiles'] = billing_profiles
         context['billing_form'] = form
-        # Removemos a busca pelo objeto Order, pois ele ainda não foi criado
         return context
 
     def post(self, request, *args, **kwargs):

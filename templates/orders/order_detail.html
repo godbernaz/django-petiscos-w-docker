@@ -10,6 +10,17 @@
             <p class="card-text">
                 <strong>Data:</strong> {{ order.created_at|date:"d/m/Y H:i" }}<br>
                 <strong>Total:</strong> {{ order.total_price }}€<br>
+                <strong>Estado do Pedido:</strong>
+                <span class="badge 
+                    {% if order.status == 'Open' %}bg-primary
+                    {% elif order.status == 'Ready' %}bg-warning
+                    {% elif order.status == 'Delivered' %}bg-success
+                    {% elif order.status == 'Closed' %}bg-secondary
+                    {% elif order.status == 'Canceled' %}bg-danger
+                    {% endif %}">
+                    {{ order.status }}
+                </span>
+                <br>
                 <strong>Perfil de Faturação:</strong> {{ order.billing_info.name }}<br>
                 <strong>Morada:</strong> {{ order.billing_info.address }}<br>
                 <strong>Cidade:</strong> {{ order.billing_info.city }}<br>
