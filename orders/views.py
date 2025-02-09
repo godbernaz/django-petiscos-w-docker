@@ -1,5 +1,7 @@
+# orders/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from carts.models import Cart
@@ -93,5 +95,11 @@ class OrderDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order'] = get_object_or_404(Order, id=self.kwargs['order_id'], user=self.request.user)
+        order = get_object_or_404(Order, id=self.kwargs['order_id'])
+        
+        # Allow access if the user is staff, superuser, or the order belongs to the user
+        if not (self.request.user.is_staff or self.request.user.is_superuser or order.user == self.request.user):
+            raise PermissionDenied
+        
+        context['order'] = order
         return context
